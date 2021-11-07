@@ -1,3 +1,7 @@
 # project files
 
 cryptoData
+
+# other
+.venv
+.vscode

@@ -1,6 +1,5 @@
-
-# root of the project. This is the file that should get run 
 import sys, json
+from utils.prep_utils import load_data
 
 """
 ticker => name of the particular coin to generate a model for
@@ -8,10 +7,14 @@ run_settings => tells the handler how to run
 run_all => pass in to generate for all coins
 """
 def handler (ticker, run_settings, run_all=False):
-    print('starting up...', ticker, run_settings, run_all, sep='\n')
-    # prep data 
+    # prep test data for the model with customized configs
+    load_data_params = { "ticker": ticker, **run_settings["prep"] }
+    data = load_data(**load_data_params)
+    print('load_data test - data returned:', True if data is not None else False)
+    if data is None:
+        return
     # create model 
-    # train model 
+    # train model
     # test model
     pass
 

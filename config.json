@@ -1,5 +1,13 @@
 {
-    "prep": {},
+    "prep": {
+        "n_steps": 50,
+        "scale": true,
+        "shuffle": true,
+        "lookup_step": 1,
+        "split_by_date": true,
+        "test_size": 0.2, 
+        "feature_columns": ["Close", "Volume", "Open", "High", "Low"]
+    },
     "create": {},
     "train": {},
     "test": {}
