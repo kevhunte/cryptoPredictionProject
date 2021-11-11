@@ -1,5 +1,6 @@
 import sys, json
 from utils.prep_utils import load_data
+from utils.create_utils import create_model
 
 """
 ticker => name of the particular coin to generate a model for
@@ -10,10 +11,11 @@ def handler (ticker, run_settings, run_all=False):
     # prep test data for the model with customized configs
     load_data_params = { "ticker": ticker, **run_settings["prep"] }
     data = load_data(**load_data_params)
-    print('load_data test - data returned:', True if data is not None else False)
     if data is None:
+        print('loading data was unsuccessful')
         return
-    # create model 
+    # create model
+    model = create_model(**run_settings["create"])
     # train model
     # test model
     pass

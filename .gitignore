@@ -5,3 +5,5 @@ cryptoData
 # other
 .venv
 .vscode
+
+.DS_Store

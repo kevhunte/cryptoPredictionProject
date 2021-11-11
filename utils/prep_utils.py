@@ -9,6 +9,7 @@ import random, json
 from sklearn import preprocessing
 from sklearn.model_selection import train_test_split
 from collections import deque
+from termcolor import colored
 
 with open("utils/ticker_to_csv.json",'r') as f:
     ticker_to_csv = json.load(f)
@@ -27,7 +28,7 @@ def shuffle_in_unison(a, b):
     np.random.shuffle(b)
 
 def load_data(ticker="", n_steps=None, scale=None, shuffle=None, lookup_step=None, split_by_date=None, test_size=None, feature_columns=[]):
-    print('starting data load...')
+    print(colored('starting data load...', 'magenta'))
 
     if isinstance(ticker, str) and ticker_to_csv.get(ticker) is not None:
         file_name = 'cryptoData/' + ticker_to_csv.get(ticker)
@@ -109,5 +110,5 @@ def load_data(ticker="", n_steps=None, scale=None, shuffle=None, lookup_step=Non
     # remove dates from the training/testing sets & convert to float32
     result["X_train"] = result["X_train"][:, :, :len(feature_columns)].astype(np.float32)
     result["X_test"] = result["X_test"][:, :, :len(feature_columns)].astype(np.float32)
-
+    print(colored('test data creation complete', 'green'))
     return result

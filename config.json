@@ -8,7 +8,17 @@
         "test_size": 0.2, 
         "feature_columns": ["Close", "Volume", "Open", "High", "Low"]
     },
-    "create": {},
+    "create": {
+        "sequence_length": 10,
+        "n_features": 3,
+        "units": 256,
+        "n_layers": 2, 
+        "dropout": 0.3,
+        "loss": "mean_absolute_error", 
+        "optimizer": "rmsprop", 
+        "bidirectional": false,
+        "activation": "linear"
+    },
     "train": {},
     "test": {}
 }

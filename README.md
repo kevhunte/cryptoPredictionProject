@@ -6,7 +6,9 @@ Dataset: [Dataset link here]
 
 ## Usage
 
-use "python3 main.py 'insert ticker name here'"
+```sh
+python3 main.py 'insert supported ticker name here'
+```
 
 ### Dataset from Kaggle
 
