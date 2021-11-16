@@ -1,7 +1,7 @@
 import tensorflow as tf
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import LSTM, Dense, Dropout, Bidirectional
-from tensorflow.keras.callbacks import ModelCheckpoint, TensorBoard
+import time
 from termcolor import colored
 
 def create_model(sequence_length, n_features, units=0, cell=LSTM, n_layers=0, 
@@ -31,5 +31,6 @@ dropout=0.0, loss="", optimizer="", bidirectional=False, activation=""):
         model.add(Dropout(dropout))
     model.add(Dense(1, activation=activation))
     model.compile(loss=loss, metrics=[loss], optimizer=optimizer)
-    print(colored('model creation complete', 'green'))
-    return model
+    model_name = f'{sequence_length}-{n_features}-{units}-{cell.__name__}-{n_layers}-{dropout}-{loss}-{optimizer}-{bidirectional}-{activation}-{time.time()}'
+    print(colored(f'model creation complete: {model_name}', 'green'))
+    return (model, model_name)

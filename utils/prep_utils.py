@@ -28,7 +28,7 @@ def shuffle_in_unison(a, b):
     np.random.shuffle(b)
 
 def load_data(ticker="", n_steps=None, scale=None, shuffle=None, lookup_step=None, split_by_date=None, test_size=None, feature_columns=[]):
-    print(colored('starting data load...', 'magenta'))
+    print(colored('creating test data...', 'magenta'))
 
     if isinstance(ticker, str) and ticker_to_csv.get(ticker) is not None:
         file_name = 'cryptoData/' + ticker_to_csv.get(ticker)
