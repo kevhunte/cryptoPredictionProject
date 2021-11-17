@@ -18,7 +18,7 @@ def handler (ticker, run_settings, run_all=False):
     # create model
     model, model_name = create_model(**run_settings["create"])
     # train model
-    training_params = { "data": data, "model": model, "model_name": model_name, **run_settings["train"] }
+    training_params = { "data": data, "model": model, "model_name": f'{ticker}-{model_name}', **run_settings["train"] }
     train_model(**training_params)
     # test model
     pass
