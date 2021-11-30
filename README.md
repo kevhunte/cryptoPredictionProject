@@ -4,13 +4,15 @@ Built using RNN and LSTM
 
 ## Usage
 
+download the dataset from Kaggle and place the files in a folder named ```cryptoData```
+
 ```sh
 python3 main.py '<insert supported ticker name here>'
 ```
 
 ### Dataset from Kaggle
 
-url[Kaggle](https://www.kaggle.com/sudalairajkumar/cryptocurrencypricehistory)
+[Kaggle](https://www.kaggle.com/sudalairajkumar/cryptocurrencypricehistory)
 
 ### commands
 
