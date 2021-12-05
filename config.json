@@ -6,7 +6,8 @@
         "lookup_step": 1,
         "split_by_date": true,
         "test_size": 0.2, 
-        "feature_columns": ["Close", "Volume", "Open", "High", "Low"]
+        "feature_columns": ["Close", "Volume", "Open", "High", "Low"],
+        "debug": false
     },
     "create": {
         "sequence_length": 50,
@@ -22,7 +23,13 @@
     "train": {
         "output_dir": "output",
         "BATCH_SIZE": 64,
-        "EPOCHS": 10
+        "EPOCHS": 3
     },
-    "test": {}
+    "test": {
+        "LOSS": "mean_absolute_error",
+        "SCALE": true,
+        "LOOKUP_STEP": 1,
+        "N_STEPS": 50,
+        "show_graph": false
+    }
 }

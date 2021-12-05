@@ -27,13 +27,12 @@ def shuffle_in_unison(a, b):
     np.random.set_state(state)
     np.random.shuffle(b)
 
-def load_data(ticker="", n_steps=None, scale=None, shuffle=None, lookup_step=None, split_by_date=None, test_size=None, feature_columns=[]):
+def load_data(ticker="", n_steps=None, scale=None, shuffle=None, lookup_step=None, split_by_date=None, test_size=None, feature_columns=[], debug=False):
     print(colored('creating test data...', 'magenta'))
 
     if isinstance(ticker, str) and ticker_to_csv.get(ticker) is not None:
         file_name = 'cryptoData/' + ticker_to_csv.get(ticker)
         df = pd.read_csv(file_name)
-        # print(df.head())
     elif isinstance(ticker, str) and ticker_to_csv.get(ticker) is None:
         print("please use a supported ticker symbol -", *ticker_to_csv.keys())
         return None
@@ -104,11 +103,14 @@ def load_data(ticker="", n_steps=None, scale=None, shuffle=None, lookup_step=Non
     dates = result["X_test"][:, -1, -1]
 
     # retrieve test features from the original dataframe
-    result["test_df"] = result["df"].reindex([dates], axis=1) # swapped .loc with .reindex, source: https://stackoverflow.com/questions/65422225/how-to-solve-keyerrorfnone-of-key-are-in-the-axis-name-in-this-case
+    result["test_df"] = result["df"][result["df"]["Date"].isin(dates)]
     # remove duplicated dates in the testing dataframe
     result["test_df"] = result["test_df"][~result["test_df"].index.duplicated(keep='first')]
     # remove dates from the training/testing sets & convert to float32
     result["X_train"] = result["X_train"][:, :, :len(feature_columns)].astype(np.float32)
     result["X_test"] = result["X_test"][:, :, :len(feature_columns)].astype(np.float32)
     print(colored('test data creation complete', 'green'))
+    if debug:
+        test_df = result["df"][result["df"]["Date"].isin(dates)]
+        print('TEST -', result["df"].head(), test_df.head(), len(test_df), len(dates), sep='\n')
     return result
