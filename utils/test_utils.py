@@ -70,7 +70,7 @@ def predict(model, data, N_STEPS=0, SCALE=True):
         predicted_price = prediction[0][0]
     return predicted_price
 
-def evaluate(model, data, LOSS, SCALE=True, LOOKUP_STEP=0, N_STEPS=0, show_graph=False):
+def evaluate(model, data, LOSS, SCALE=True, LOOKUP_STEP=0, N_STEPS=0, show_graph=False, TKR=""):
     # evaluate the model
     loss, mae = model.evaluate(data["X_test"], data["y_test"], verbose=0)
     # calculate the mean absolute error (inverse scaling)
@@ -85,9 +85,17 @@ def evaluate(model, data, LOSS, SCALE=True, LOOKUP_STEP=0, N_STEPS=0, show_graph
     accuracy_score = (len(final_df[final_df['sell_profit'] > 0]) + len(final_df[final_df['buy_profit'] > 0])) / len(final_df)
     # calculating total buy & sell profit
     # printing stats
-    print(f"Future price after {LOOKUP_STEP} days is ${future_price:.2f}")
+    original_df = data["df"]
+    stats = get_stats(original_df)
+    print("Stats on data:", *stats, sep='\n\n')
+    print(f"Future {TKR} price after {LOOKUP_STEP} days is ${future_price:.2f}")
     print(f"{LOSS} loss:", loss)
     print("Mean Absolute Error:", mean_absolute_error)
     print("Accuracy score:", accuracy_score)
     if show_graph:
         plot_graph(final_df, LOOKUP_STEP)
+
+def get_stats(df):
+    price_min_max_mean = df.groupby('Symbol').agg({'Close': ['min', 'max', 'mean']})
+    date_min_max = df.groupby('Symbol').agg({'Date': ['min', 'max']})
+    return [date_min_max, price_min_max_mean]

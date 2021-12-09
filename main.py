@@ -25,9 +25,8 @@ def handler (ticker, run_settings, run_all=False):
     # test model
     model_path = os.path.join(run_settings["train"]["output_dir"],"results", full_model_name) + ".h5"
     model.load_weights(model_path) # optimal weights from training
-    evaluate_params = { "model": model, "data": data, **run_settings["test"]  }
+    evaluate_params = { "model": model, "data": data, "TKR": ticker, **run_settings["test"] }
     evaluate(**evaluate_params)
-    pass
 
 if __name__ == '__main__':
     # grab whatever cmd line args and pass into handler.
