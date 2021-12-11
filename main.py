@@ -17,7 +17,8 @@ def handler (ticker, run_settings, run_all=False):
         print('loading data was unsuccessful')
         return
     # create model
-    model, model_name = create_model(**run_settings["create"])
+    create_model_params = { "n_features": len(run_settings["prep"]["feature_columns"]), **run_settings["create"]}
+    model, model_name = create_model(**create_model_params)
     # train model
     full_model_name = f'{ticker}-{model_name}' # include ticker trained with
     training_params = { "data": data, "model": model, "model_name": full_model_name, **run_settings["train"] }

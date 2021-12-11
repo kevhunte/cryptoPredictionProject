@@ -1,7 +1,6 @@
 """
 Comment out imports until needed. TF slows down the program drastically
 """
-# import tensorflow as tf
 import numpy as np
 import pandas as pd
 import random, json
@@ -17,7 +16,6 @@ with open("utils/ticker_to_csv.json",'r') as f:
 SEED_VAL = 123
 
 np.random.seed(SEED_VAL)
-# tf.random.set_seed(SEED_VAL)
 random.seed(SEED_VAL)
 
 def shuffle_in_unison(a, b):
