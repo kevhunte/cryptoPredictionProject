@@ -11,7 +11,7 @@ run_all => pass in to generate for all coins
 """
 def handler (ticker, run_settings, run_all=False):
     # prep test data for the model with customized configs
-    load_data_params = { "ticker": ticker, **run_settings["prep"] }
+    load_data_params = { "ticker": ticker, "MARGIN": run_settings["test"]["MARGIN"], **run_settings["prep"] }
     data = load_data(**load_data_params)
     if data is None:
         print('loading data was unsuccessful')

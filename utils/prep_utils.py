@@ -25,7 +25,7 @@ def shuffle_in_unison(a, b):
     np.random.set_state(state)
     np.random.shuffle(b)
 
-def load_data(ticker="", n_steps=None, scale=None, shuffle=None, lookup_step=None, split_by_date=None, test_size=None, feature_columns=[], debug=False):
+def load_data(ticker="", n_steps=None, scale=None, shuffle=None, lookup_step=None, split_by_date=None, test_size=None, feature_columns=[], MARGIN=0, debug=False):
     print(colored('creating test data...', 'magenta'))
 
     if isinstance(ticker, str) and ticker_to_csv.get(ticker) is not None:
@@ -98,6 +98,7 @@ def load_data(ticker="", n_steps=None, scale=None, shuffle=None, lookup_step=Non
         # split the dataset randomly
         result["X_train"], result["X_test"], result["y_train"], result["y_test"] = train_test_split(X, y, test_size=test_size, shuffle=shuffle)
 
+    result["margin"] = len(result["y_test"]) * [MARGIN]
     dates = result["X_test"][:, -1, -1]
 
     # retrieve test features from the original dataframe
