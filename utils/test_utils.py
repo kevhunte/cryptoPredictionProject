@@ -63,27 +63,27 @@ def predict(model, data, N_STEPS=0, SCALE=True):
 
 def evaluate(model, data, LOSS, SCALE=True, LOOKUP_STEP=0, N_STEPS=0, show_graph=False, MARGIN=0, TKR=""):
     # evaluate the model
-    loss, mae = model.evaluate(data["X_test"], data["y_test"], verbose=0)
+    loss, mae, mse, mape = model.evaluate(data["X_test"], data["y_test"], verbose=0)
     # calculate the mean absolute error (inverse scaling)
     if SCALE:
         mean_absolute_error = data["column_scaler"]["Close"].inverse_transform([[mae]])[0][0]
+        mean_squared_error = data["column_scaler"]["Close"].inverse_transform([[mse]])[0][0]
+        mean_absolute_percentage_error = data["column_scaler"]["Close"].inverse_transform([[mape]])[0][0]
     else:
         mean_absolute_error = mae
+        mean_squared_error = mse
+        mean_absolute_percentage_error = mape
     final_df = get_final_df(model, data, LOOKUP_STEP=LOOKUP_STEP, SCALE=SCALE, MARGIN=MARGIN)
     future_price = predict(model, data, N_STEPS=N_STEPS, SCALE=SCALE)
-    # Evaluation Stats
-    # we calculate the accuracy by counting the number of positive profits
-    # accuracy_score = (len(final_df[final_df['sell_profit'] > 0]) + len(final_df[final_df['buy_profit'] > 0])) / len(final_df)
-    accuracy_score = (len(final_df[final_df['score'] > 0])) / len(final_df)
-    # calculating total buy & sell profit
     # printing stats
     original_df = data["df"]
     stats = get_stats(original_df)
     print("Stats on data:", *stats, sep='\n\n')
-    print(f"Future {TKR} price after {LOOKUP_STEP} days is ${future_price:.2f}")
-    print(f"{LOSS} loss:", loss)
+    print(f"Loss:", loss)
     print("Mean Absolute Error:", mean_absolute_error)
-    print(f"Accuracy score of predictions within {(1-MARGIN):.2f}%:", accuracy_score)
+    print("Mean Squared Error:", mean_squared_error)
+    print("Mean Absolute Percentage Error", mean_absolute_percentage_error)
+    print(f"\nThe model predicts that the future {TKR} price after {LOOKUP_STEP} days will be ${future_price:.2f}")
     if show_graph:
         plot_graph(final_df, LOOKUP_STEP)
 

@@ -1,4 +1,3 @@
-import tensorflow as tf
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import LSTM, Dense, Dropout, Bidirectional
 import time
@@ -30,7 +29,7 @@ dropout=0.0, loss="", optimizer="", bidirectional=False, activation=""):
         # add dropout after each layer
         model.add(Dropout(dropout))
     model.add(Dense(1, activation=activation))
-    model.compile(loss=loss, metrics=[loss], optimizer=optimizer)
+    model.compile(loss=loss, metrics=[loss, "mean_squared_error", "mean_absolute_percentage_error"], optimizer=optimizer)
     model_name = f'{sequence_length}-{n_features}-{units}-{cell.__name__}-{n_layers}-{dropout}-{loss}-{optimizer}-{bidirectional}-{activation}-{time.time()}'
     print(colored(f'model creation complete: {model_name}', 'green'))
     return (model, model_name)
