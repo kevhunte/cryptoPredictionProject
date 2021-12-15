@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
+from termcolor import colored
 
 def plot_graph(test_df, LOOKUP_STEP=0):
     """
@@ -62,32 +63,37 @@ def predict(model, data, N_STEPS=0, SCALE=True):
     return predicted_price
 
 def evaluate(model, data, LOSS, SCALE=True, LOOKUP_STEP=0, N_STEPS=0, show_graph=False, MARGIN=0, TKR=""):
+    print(colored('starting model evaluation...', 'blue'))
     # evaluate the model
-    loss, mae, mse, mape = model.evaluate(data["X_test"], data["y_test"], verbose=0)
+    loss, mae, mse = model.evaluate(data["X_test"], data["y_test"], verbose=0)
     # calculate the mean absolute error (inverse scaling)
     if SCALE:
         mean_absolute_error = data["column_scaler"]["Close"].inverse_transform([[mae]])[0][0]
         mean_squared_error = data["column_scaler"]["Close"].inverse_transform([[mse]])[0][0]
-        mean_absolute_percentage_error = data["column_scaler"]["Close"].inverse_transform([[mape]])[0][0]
+        # mean_absolute_percentage_error = data["column_scaler"]["Close"].inverse_transform([[mape]])[0][0]
     else:
         mean_absolute_error = mae
         mean_squared_error = mse
-        mean_absolute_percentage_error = mape
+        # mean_absolute_percentage_error = mape
     final_df = get_final_df(model, data, LOOKUP_STEP=LOOKUP_STEP, SCALE=SCALE, MARGIN=MARGIN)
     future_price = predict(model, data, N_STEPS=N_STEPS, SCALE=SCALE)
     # printing stats
     original_df = data["df"]
     stats = get_stats(original_df)
+    latest_price = original_df["Close"].tail(1).values[0]
     print("Stats on data:", *stats, sep='\n\n')
+    print("Stats on model:", sep='\n\n')
     print(f"Loss:", loss)
     print("Mean Absolute Error:", mean_absolute_error)
-    print("Mean Squared Error:", mean_squared_error)
-    print("Mean Absolute Percentage Error", mean_absolute_percentage_error)
+    # print("Mean Squared Error:", mean_squared_error)
+    # print("Mean Absolute Percentage Error", mean_absolute_percentage_error)
     print(f"\nThe model predicts that the future {TKR} price after {LOOKUP_STEP} days will be ${future_price:.2f}")
+    print(f"Average error margin: +/- {(mean_absolute_error/latest_price)*100:.2f}%")
     if show_graph:
         plot_graph(final_df, LOOKUP_STEP)
 
 def get_stats(df):
     price_min_max_mean = df.groupby('Symbol').agg({'Close': ['min', 'max', 'mean']})
     date_min_max = df.groupby('Symbol').agg({'Date': ['min', 'max']})
-    return [date_min_max, price_min_max_mean]
+    latest_price = df["Close"].tail(1).values[0]
+    return [date_min_max, price_min_max_mean, f"Latest closing price in dataset: ${latest_price}"]
