@@ -2,7 +2,7 @@
     "prep": {
         "n_steps": 50,
         "scale": true,
-        "shuffle": true,
+        "shuffle": false,
         "lookup_step": 1,
         "split_by_date": true,
         "test_size": 0.2, 
@@ -12,11 +12,11 @@
     "create": {
         "sequence_length": 50,
         "units": 256,
-        "n_layers": 2, 
-        "dropout": 0.3,
+        "n_layers": 2,
+        "dropout": 0.2,
         "loss": "mean_absolute_error",
         "optimizer": "rmsprop", 
-        "bidirectional": false,
+        "bidirectional": true,
         "activation": "linear"
     },
     "train": {
