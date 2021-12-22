@@ -8,12 +8,15 @@ def create_output_folders(root=""):
     results_path = os.path.join(root,"results")
     logs_path = os.path.join(root,"logs")
     data_path = os.path.join(root,"data")
+    stats_path = os.path.join(root,"stats")
     if not os.path.isdir(results_path):
         os.mkdir(results_path)
     if not os.path.isdir(logs_path):
         os.mkdir(logs_path)
     if not os.path.isdir(data_path):
         os.mkdir(data_path)
+    if not os.path.isdir(stats_path):
+        os.mkdir(stats_path)
 
 
 def train_model(data, model, model_name="", output_dir="", BATCH_SIZE=0, EPOCHS=0):

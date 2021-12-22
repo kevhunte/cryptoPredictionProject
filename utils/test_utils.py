@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
 from termcolor import colored
 
 def plot_graph(test_df, LOOKUP_STEP=0):
@@ -89,6 +90,10 @@ def evaluate(model, data, LOSS, SCALE=True, LOOKUP_STEP=0, N_STEPS=0, show_graph
     # print("Mean Absolute Percentage Error", mean_absolute_percentage_error)
     print(f"\nThe model predicts that the future {TKR} price after {LOOKUP_STEP} days will be ${future_price:.2f}")
     print(f"Average error margin: +/- {(mean_absolute_error/latest_price)*100:.2f}%")
+    file_name = 'output/stats/runResults.csv'
+    statsDF = pd.read_csv(file_name)
+    statsDF.loc[-1] = [TKR, mean_absolute_error, mean_squared_error, loss] # add data from this run
+    statsDF.to_csv(file_name, index=False)
     if show_graph:
         plot_graph(final_df, LOOKUP_STEP)
 
