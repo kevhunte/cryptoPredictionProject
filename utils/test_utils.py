@@ -63,7 +63,7 @@ def predict(model, data, N_STEPS=0, SCALE=True):
         predicted_price = prediction[0][0]
     return predicted_price
 
-def evaluate(model, data, LOSS, SCALE=True, LOOKUP_STEP=0, N_STEPS=0, show_graph=False, MARGIN=0, TKR=""):
+def evaluate(model, data, LOSS, SCALE=True, LOOKUP_STEP=0, N_STEPS=0, show_graph=False, MARGIN=0, save_stats=False, TKR=""):
     print(colored('starting model evaluation...', 'blue'))
     # evaluate the model
     loss, mae, mse = model.evaluate(data["X_test"], data["y_test"], verbose=0)
@@ -90,10 +90,11 @@ def evaluate(model, data, LOSS, SCALE=True, LOOKUP_STEP=0, N_STEPS=0, show_graph
     # print("Mean Absolute Percentage Error", mean_absolute_percentage_error)
     print(f"\nThe model predicts that the future {TKR} price after {LOOKUP_STEP} days will be ${future_price:.2f}")
     print(f"Average error margin: +/- {(mean_absolute_error/latest_price)*100:.2f}%")
-    file_name = 'output/stats/runResults.csv'
-    statsDF = pd.read_csv(file_name)
-    statsDF.loc[-1] = [TKR, mean_absolute_error, mean_squared_error, loss] # add data from this run
-    statsDF.to_csv(file_name, index=False)
+    if save_stats:
+        file_name = 'output/stats/runResults.csv'
+        statsDF = pd.read_csv(file_name)
+        statsDF.loc[-1] = [TKR, mean_absolute_error, mean_squared_error, loss] # add data from this run
+        statsDF.to_csv(file_name, index=False)
     if show_graph:
         plot_graph(final_df, LOOKUP_STEP)
 

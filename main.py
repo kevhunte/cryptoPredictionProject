@@ -35,4 +35,6 @@ if __name__ == '__main__':
     run_all = True if '--run-all' in sys.argv else False
     with open('config.json','r') as f:
         run_settings = json.load(f)
-    handler(coin, run_settings, run_all=run_all)
+    for _ in range(1):
+        # automate eval metrics
+        handler(coin, run_settings, run_all=run_all)
