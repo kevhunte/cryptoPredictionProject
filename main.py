@@ -1,8 +1,9 @@
 import sys, json, os
+import pandas as pd
 from utils.prep_utils import load_data
 from utils.create_utils import create_model
 from utils.train_utils import train_model
-from utils.test_utils import evaluate
+from utils.test_utils import evaluate, plot_graph_run_stats, plot_graph_price
 
 """
 ticker => name of the particular coin to generate a model for
@@ -33,8 +34,23 @@ if __name__ == '__main__':
     # grab whatever cmd line args and pass into handler.
     coin = sys.argv[1] if len(sys.argv) > 1 else ''
     run_all = True if '--run-all' in sys.argv else False
+    plot_stats = True if '--plot-stats' in sys.argv else False
+    plot_price = True if '--plot-price' in sys.argv else False
     with open('config.json','r') as f:
         run_settings = json.load(f)
-    for _ in range(1):
+    if plot_stats:
+        file_name = 'output/stats/runResults.csv'
+        runResultsDF = pd.read_csv(file_name)
+        plot_graph_run_stats(runResultsDF)
+    elif plot_price:
+        file_name = 'cryptoData/coin_Bitcoin.csv'
+        priceDF = pd.read_csv(file_name)
+        file_name = 'cryptoData/coin_Ethereum.csv'
+        priceDF = pd.concat([priceDF, pd.read_csv(file_name)]) # merge
+        file_name = 'cryptoData/coin_Cardano.csv'
+        priceDF = pd.concat([priceDF, pd.read_csv(file_name)]).reset_index(drop=True) # merge
+        plot_graph_price(priceDF)
+    else:
+        for _ in range(10):
         # automate eval metrics
-        handler(coin, run_settings, run_all=run_all)
+            handler(coin, run_settings, run_all=run_all)

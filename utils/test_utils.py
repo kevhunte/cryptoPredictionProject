@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 from termcolor import colored
 
-def plot_graph(test_df, LOOKUP_STEP=0):
+def plot_graph_price_diff(test_df, LOOKUP_STEP=0):
     """
     This function plots true close price along with predicted close price
     with blue and red colors respectively
@@ -13,6 +13,39 @@ def plot_graph(test_df, LOOKUP_STEP=0):
     plt.xlabel("Days")
     plt.ylabel("Price")
     plt.legend(["Actual Price", "Predicted Price"])
+    plt.show()
+
+def plot_graph_price(df):
+    # take a merged csv and split here
+    # print(df.tail())
+    BTC_data = df[df['Symbol'] == 'BTC']
+    ETH_data = df[df['Symbol'] == 'ETH']
+    ADA_data = df[df['Symbol'] == 'ADA']
+    plt.plot(BTC_data['Date'], BTC_data['Close'], c='b')
+    plt.plot(ETH_data['Date'], ETH_data['Close'], c='r')
+    plt.plot(ADA_data['Date'], ADA_data['Close'], c='g')
+    plt.tick_params(
+        axis='x',          # changes apply to the x-axis
+        which='both',      # both major and minor ticks are affected
+        bottom=False,      # ticks along the bottom edge are off
+        top=False,         # ticks along the top edge are off
+        labelbottom=False) # labels along the bottom edge are off
+    plt.xlabel("Date")
+    plt.ylabel("Price ($)")
+    plt.legend(["Bitcoin", "Ethereum", "Cardano"])
+    plt.show()
+
+def plot_graph_run_stats(df):
+    df = df.assign(MAE_Percentage = lambda x: (x['MAE']/x['LatestPrice'])*100) # divide each val by latest price
+    BTC_data = df[df['TKR'] == 'BTC'].reset_index(drop=True)
+    ETH_data = df[df['TKR'] == 'ETH'].reset_index(drop=True)
+    ADA_data = df[df['TKR'] == 'ADA'].reset_index(drop=True)
+    plt.plot(BTC_data['MAE_Percentage'] , c='b')
+    plt.plot(ETH_data['MAE_Percentage'] , c='r')
+    plt.plot(ADA_data['MAE_Percentage'] , c='g')
+    plt.xlabel("Runs")
+    plt.ylabel("Relative Mean Abs. Error (%)")
+    plt.legend(["Bitcoin", "Ethereum", "Cardano"])
     plt.show()
 
 def get_final_df(model, data, LOOKUP_STEP=0, SCALE=True, MARGIN=0):
@@ -93,10 +126,10 @@ def evaluate(model, data, LOSS, SCALE=True, LOOKUP_STEP=0, N_STEPS=0, show_graph
     if save_stats:
         file_name = 'output/stats/runResults.csv'
         statsDF = pd.read_csv(file_name)
-        statsDF.loc[-1] = [TKR, mean_absolute_error, mean_squared_error, loss] # add data from this run
+        statsDF.loc[-1] = [TKR, mean_absolute_error, mean_squared_error, loss, latest_price] # add data from this run
         statsDF.to_csv(file_name, index=False)
     if show_graph:
-        plot_graph(final_df, LOOKUP_STEP)
+        plot_graph_price_diff(final_df, LOOKUP_STEP)
 
 def get_stats(df):
     price_min_max_mean = df.groupby('Symbol').agg({'Close': ['min', 'max', 'mean']})
