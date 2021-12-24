@@ -4,7 +4,7 @@ import pandas as pd
 from termcolor import colored
 
 def parse_dates(df):
-    return df['Date'].head(1).values[0].split(' ')[0], df['Date'].tail(1).values[0].split(' ')[0]
+    return df['Date'].head(1).values[0].split(' ')[0], df['Date'].tail(1).values[0].split(' ')[0], df['Close'].head(1).values[0], df['Close'].tail(1).values[0], df['Close'].max(), df.loc[df['Close'] == df['Close'].max()]['Date']
 
 def plot_graph_price_diff(test_df, LOOKUP_STEP=0):
     """
