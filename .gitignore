@@ -1,7 +1,8 @@
 # project files
 
 cryptoData
-output
+output/logs
+output/results
 
 # other
 .venv

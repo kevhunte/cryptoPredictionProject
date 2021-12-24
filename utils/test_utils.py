@@ -3,6 +3,9 @@ import numpy as np
 import pandas as pd
 from termcolor import colored
 
+def parse_dates(df):
+    return df['Date'].head(1).values[0].split(' ')[0], df['Date'].tail(1).values[0].split(' ')[0]
+
 def plot_graph_price_diff(test_df, LOOKUP_STEP=0):
     """
     This function plots true close price along with predicted close price
@@ -18,9 +21,14 @@ def plot_graph_price_diff(test_df, LOOKUP_STEP=0):
 def plot_graph_price(df):
     # take a merged csv and split here
     # print(df.tail())
+    dates = []
     BTC_data = df[df['Symbol'] == 'BTC']
     ETH_data = df[df['Symbol'] == 'ETH']
     ADA_data = df[df['Symbol'] == 'ADA']
+    dates.append(parse_dates(BTC_data))
+    dates.append(parse_dates(ETH_data))
+    dates.append(parse_dates(ADA_data))
+    print('start and closing dates', *dates, sep='\n')
     plt.plot(BTC_data['Date'], BTC_data['Close'], c='b')
     plt.plot(ETH_data['Date'], ETH_data['Close'], c='r')
     plt.plot(ADA_data['Date'], ADA_data['Close'], c='g')

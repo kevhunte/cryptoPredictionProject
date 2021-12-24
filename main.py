@@ -51,6 +51,6 @@ if __name__ == '__main__':
         priceDF = pd.concat([priceDF, pd.read_csv(file_name)]).reset_index(drop=True) # merge
         plot_graph_price(priceDF)
     else:
-        for _ in range(10):
+        for _ in range(1):
         # automate eval metrics
             handler(coin, run_settings, run_all=run_all)

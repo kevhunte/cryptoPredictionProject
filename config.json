@@ -29,7 +29,6 @@
         "SCALE": true,
         "LOOKUP_STEP": 1,
         "N_STEPS": 50,
-        "MARGIN": 0.005,
         "show_graph": false,
         "save_stats": false
     }
